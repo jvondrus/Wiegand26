@@ -145,7 +145,7 @@ void loop() {
 
 ## Example
 
-[Example][3]
+[./examples/wiegand26/wiegand26.ino][3]
 
 
 ## Wiegand 
@@ -176,4 +176,4 @@ The physical size limitations of the card dictated that a maximum of 37 Wiegand 
 
 [1]: https://en.wikipedia.org/wiki/Wiegand_interface
 [2]: https://docs.tibbo.com/taiko/ser_wiegand_mode
-[3]: https://github.com/jvondrus/Wiegand26/examples/wiegand26/wiegand26.ino
+[3]: https://github.com/jvondrus/Wiegand26/blob/master/examples/wiegand26/wiegand26.ino
