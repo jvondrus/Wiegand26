@@ -1,0 +1,23 @@
+{
+  "name": "Wiegand26",
+  "description": "Receiving data from Wiegand26 card readers.",
+  "keywords": "arduino, esp32, esp8266, wiegand, wiegand26, card, reader",
+  "authors": [
+      {
+          "name": "Jiri Vondrus",
+          "email": "jvondrus@gmail.com",
+          "url": "https://github.com/jvondrus",
+          "maintainer": true
+      }
+  ],
+  "repository": {
+      "type": "git",
+      "url": "https://github.com/jvondrus/Wiegand26"
+  },
+  "version": "1.0.0",
+  "homepage": "https://github.com/jvondrus",
+  "frameworks": "Arduino",
+  "examples": [
+      "examples/*/*.ino"
+  ]
+}
