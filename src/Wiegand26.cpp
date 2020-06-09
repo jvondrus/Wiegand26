@@ -1,7 +1,7 @@
 /*
 *  Wiegand26
 *  by Jiri Vondrus (https://github.com/jvondrus)
-*  Version 1.0.0 06-2020
+*  Version 1.1.0 06-2020
 */
 
 // Import
@@ -50,6 +50,7 @@ inline unsigned long alignData (bool* bits) {
       bitSet (data, (i - 1));
     }
   }
+  data = (data & 0x0000FF) << 16 | (data & 0x00FF00) | (data & 0xFF0000) >> 16;
   return data;
 }
 

@@ -2,6 +2,8 @@
 
 Receiving data from Wiegand26 card readers.
 
+Card readers with Wiegand26 protocol are sending only first 3 Bytes from the card Serial number (first 16 Byte block for UID0-UID3 / MANUFACTURER).
+
 Library is made for Arduino IDE and for Arduinos, ESP32 and ESP8266.
 
 ## Features
@@ -12,6 +14,11 @@ Library is made for Arduino IDE and for Arduinos, ESP32 and ESP8266.
 * _Status_ id formated as 1Byte number _(unsigned short int / Byte)_
 * _Status_ data can be triggered manually
 
+
+## Change log
+
+* 1.0.0 - Initial release
+* 1.1.0 - Swapping read Bytes of serial number for correct show
 
 ## Using
 
@@ -46,19 +53,14 @@ Setup pins and library.
 void setup()
 {
 
-  pinMode (LED, OUTPUT);
-  pinMode (wiegandLED, OUTPUT);
-  digitalWrite (LED, HIGH);
-  digitalWrite (wiegandLED, LOW);
-  
   // Serial line
   Serial.begin (115200, SERIAL_8N1);
   Serial.setTimeout (15);
   delay (1000);
 
   // Wiegand RFID
-  wiegand.onData (wiegandData);
-  wiegand.onState (wiegandState);
+  wiegand.onData (wiegandData);                   // Function for handle with data
+  wiegand.onState (wiegandState);                 // Function for handle with status
   wiegand.begin(wiegandD0, wiegandD1, true);
   //            Data0      Data1      false == Send state only on change
   //                                  true  == Send state on each data reading
@@ -67,7 +69,6 @@ void setup()
   attachInterrupt(digitalPinToInterrupt(wiegandD0), wiegandPinChanged, FALLING);
   attachInterrupt(digitalPinToInterrupt(wiegandD1), wiegandPinChanged, FALLING);
 
-  digitalWrite (LED, LOW);
 }
 ```
 
@@ -145,7 +146,7 @@ void loop() {
 
 ## Example
 
-[Example][3]
+[./examples/wiegand26/wiegand26.ino][3]
 
 
 ## Wiegand 
@@ -176,4 +177,4 @@ The physical size limitations of the card dictated that a maximum of 37 Wiegand 
 
 [1]: https://en.wikipedia.org/wiki/Wiegand_interface
 [2]: https://docs.tibbo.com/taiko/ser_wiegand_mode
-[3]: https://github.com/jvondrus/Wiegand26/examples/wiegand26/wiegand26.ino
+[3]: https://github.com/jvondrus/Wiegand26/blob/master/examples/wiegand26/wiegand26.ino

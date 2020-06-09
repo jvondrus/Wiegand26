@@ -1,7 +1,7 @@
 /*
 *  Wiegand26
 *  by Jiri Vondrus (https://github.com/jvondrus)
-*  Version 1.0.0 06-2020
+*  Version 1.1.0 06-2020
 */
 
 // Define
