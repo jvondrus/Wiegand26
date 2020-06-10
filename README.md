@@ -2,6 +2,8 @@
 
 Receiving data from Wiegand26 card readers.
 
+![Image of Wiegand26](doc/readme.png)
+
 Card readers with Wiegand26 protocol are sending only first 3 Bytes from the card Serial number (first 16 Byte block for UID0-UID3 / MANUFACTURER).
 
 Library is made for Arduino IDE and for Arduinos, ESP32 and ESP8266.
@@ -157,15 +159,15 @@ The [Wiegand interface][2] is a de facto wiring standard which arose from the po
 
 The Wiegand interface uses three wires, one of which is a common ground and two of which are data transmission wires usually called DATA0 and DATA1, alternately labeled "D0" and "D1" or "Data Low" and "Data High". When no data is being sent, both DATA0 and DATA1 are pulled up to the "high" voltage level — usually +5 VDC. When a 0 is sent the DATA0 wire is pulled to a low voltage while the DATA1 wire stays at a high voltage. When a 1 is sent the DATA1 wire is pulled to a low voltage while DATA0 stays at a high voltage.
 
-![Wiegand26 Data Logic](doc/Wiegan26_01.png)
+![Wiegand26 Data Logic](doc/Wiegand26_01.png)
 
 Pulse for valid data is around 100 µs long.
 
-![Wiegand26 Data Pulse](doc/Wiegan26_02.png)
+![Wiegand26 Data Pulse](doc/Wiegand26_02.png)
 
 Gap between pulses is around 1ms.
 
-![Wiegand26 Gap delay](doc/Wiegan26_03.png)
+![Wiegand26 Gap delay](doc/Wiegand26_03.png)
 
 The high signaling level of 5 VDC is used to accommodate long cable runs from card readers to the associated access control panel, typically located in a secure closet. Most card reader manufacturers publish a maximum cable run of 500 feet (150 m). An advantage of the Wiegand signaling format is that it allows very long cable runs, far longer than other interface standards of its day allowed.
 
