@@ -1,7 +1,7 @@
 /*
 *  Wiegand26 - https://github.com/jvondrus/Wiegand26
 *  by Jiri Vondrus (https://github.com/jvondrus)
-*  Version 1.0.0 06-2020
+*  Version 1.1.0 06-2020
 */
 
 #include <Wiegand26.h>                            // Wiegand RFID
@@ -20,21 +20,11 @@
 Wiegand26 wiegand;
 #define       wiegandD0       27                  // Pin for Data 0
 #define       wiegandD1       26                  // Pin for Data 1
-#define       wiegandLED      25                  // Pin for LED
-
-// Status LED
-#define       LED             2                   // Digital 2 - Internal LED
-byte          ledTimeout =    0;
 
 // Setup
 void setup()
 {
 
-  pinMode (LED, OUTPUT);
-  pinMode (wiegandLED, OUTPUT);
-  digitalWrite (LED, HIGH);
-  digitalWrite (wiegandLED, LOW);
-  
   // Serial line
   Serial.begin (115200, SERIAL_8N1);
   Serial.setTimeout (15);
@@ -51,7 +41,6 @@ void setup()
   attachInterrupt(digitalPinToInterrupt(wiegandD0), wiegandPinChanged, FALLING);
   attachInterrupt(digitalPinToInterrupt(wiegandD1), wiegandPinChanged, FALLING);
 
-  digitalWrite (LED, LOW);
 }
 
 
@@ -93,8 +82,6 @@ void wiegandState (uint8_t state) {
 
 // Print received Wiegand data
 void wiegandData (unsigned long value) {
-  ledTimeout = 8;
-  digitalWrite (wiegandLED, HIGH);
   
   Serial.print ("Wiegand26 - Data: 0x");
   Serial.println (value, HEX);
@@ -115,20 +102,6 @@ void loop() {
   // Manually invoke Wiegand state
   //wiegand.readState ();
   
-  if (digitalRead (LED)) {
-    digitalWrite (LED, LOW);
-  } else {
-    digitalWrite (LED, HIGH);
-  }
-
-  if (ledTimeout) {
-    ledTimeout--;
-  } else {
-    if (digitalRead (wiegandLED)) {
-      digitalWrite (wiegandLED, LOW);
-    }
-  }
-
   delay (250);
 
 }

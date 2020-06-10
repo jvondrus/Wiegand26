@@ -115,9 +115,7 @@ void wiegandState (uint8_t state) {
 
 // Print received Wiegand data
 void wiegandData (unsigned long value) {
-  ledTimeout = 8;
-  digitalWrite (wiegandLED, HIGH);
-  
+
   Serial.print ("Wiegand26 - Data: 0x");
   Serial.println (value, HEX);
 
@@ -139,7 +137,7 @@ If manually invoking status is required.
 void loop() {
   
   // Manually invoke Wiegand state
-  wiegand.readState ();
+  // wiegand.readState ();
   
   delay (250);
 
