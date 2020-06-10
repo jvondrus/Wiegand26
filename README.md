@@ -146,20 +146,28 @@ void loop() {
 
 ## Example
 
-[./examples/wiegand26/wiegand26.ino][3]
+[./examples/wiegand26/wiegand26.ino][1]
 
 
 ## Wiegand 
 
-The [Wiegand interface][1] is a de facto wiring standard which arose from the popularity of Wiegand effect card readers in the 1980s. It is commonly used to connect a card swipe mechanism to the rest of an access control system. The sensor in such a system is often a "Wiegand wire", based on the Wiegand effect, discovered by John R. Wiegand. A Wiegand-compatible reader is normally connected to a Wiegand-compatible security panel.
+The [Wiegand interface][2] is a de facto wiring standard which arose from the popularity of Wiegand effect card readers in the 1980s. It is commonly used to connect a card swipe mechanism to the rest of an access control system. The sensor in such a system is often a "Wiegand wire", based on the Wiegand effect, discovered by John R. Wiegand. A Wiegand-compatible reader is normally connected to a Wiegand-compatible security panel.
 
 ### Physical layer
 
-The communications protocol used on a Wiegand interface is known as the Wiegand protocol. The original Wiegand format had one parity bit, 8 bits of facility code, 16 bits of ID code, and a trailing parity bit for a total of 26 bits. The first parity bit is calculated from the first 12 bits of the code and the trailing parity bit from the last 12 bits. However, many inconsistent implementations and extensions to the basic format exist.
+The Wiegand interface uses three wires, one of which is a common ground and two of which are data transmission wires usually called DATA0 and DATA1, alternately labeled "D0" and "D1" or "Data Low" and "Data High". When no data is being sent, both DATA0 and DATA1 are pulled up to the "high" voltage level — usually +5 VDC. When a 0 is sent the DATA0 wire is pulled to a low voltage while the DATA1 wire stays at a high voltage. When a 1 is sent the DATA1 wire is pulled to a low voltage while DATA0 stays at a high voltage.
 
-Many access control system manufacturers adopted Wiegand technology, but were unhappy with the limitations of only 8 bits for site codes (0-255) and 16 bits for card numbers (0-65535), so they designed their own formats with varying complexity of field numbers and lengths and parity checking.
+![Wiegand26 Data Logic](doc/Wiegan26_01.png)
 
-The physical size limitations of the card dictated that a maximum of 37 Wiegand wire filaments could be placed in a standard credit card, as dictated by CR80 or ISO/IEC 7810 standards, before misreads would affect reliability. Therefore, most Wiegand formats used in physical access control are less than 37 bits in length.
+Pulse for valid data is around 100 µs long.
+
+![Wiegand26 Data Pulse](doc/Wiegan26_02.png)
+
+Gap between pulses is around 1ms.
+
+![Wiegand26 Gap delay](doc/Wiegan26_03.png)
+
+The high signaling level of 5 VDC is used to accommodate long cable runs from card readers to the associated access control panel, typically located in a secure closet. Most card reader manufacturers publish a maximum cable run of 500 feet (150 m). An advantage of the Wiegand signaling format is that it allows very long cable runs, far longer than other interface standards of its day allowed.
 
 ### Protocol
 
@@ -169,12 +177,6 @@ Many access control system manufacturers adopted Wiegand technology, but were un
 
 The physical size limitations of the card dictated that a maximum of 37 Wiegand wire filaments could be placed in a standard credit card, as dictated by CR80 or ISO/IEC 7810 standards, before misreads would affect reliability. Therefore, most Wiegand formats used in physical access control are less than 37 bits in length.
 
-![Image of Wiegand](https://docs.tibbo.com/taiko/tide_wie_data.jpg)
 
-[Image by Tibbo Technology][2]
-
-
-
-[1]: https://en.wikipedia.org/wiki/Wiegand_interface
-[2]: https://docs.tibbo.com/taiko/ser_wiegand_mode
-[3]: https://github.com/jvondrus/Wiegand26/blob/master/examples/wiegand26/wiegand26.ino
+[1]: https://github.com/jvondrus/Wiegand26/blob/master/examples/wiegand26/wiegand26.ino
+[2]: https://en.wikipedia.org/wiki/Wiegand_interface
