@@ -13,6 +13,21 @@
 
 // Setings
 #define MAX_BITS      26
+#define TIMEOUT       20
+
+// Parity
+#define EVEN          false
+#define ODD           true
+
+// States
+#define INICIALIZE    0
+#define DATA_SENDED   1
+#define CONNECTION    2
+#define LOGIC_FAULT   3
+#define RCV_TIMEOUT   4
+#define BITS_FAULTS   5
+#define PARITY_FRST   6
+#define PARITY_SCND   7
 
 
 // Class
@@ -71,7 +86,6 @@ class Wiegand26
 
     // State
     bool _first;
-    bool _doneOk;
     uint8_t _state;
     uint8_t _stateOld;
     bool _sendState;

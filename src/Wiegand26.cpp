@@ -8,24 +8,6 @@
 #include "Wiegand26.h"
 #include "Arduino.h"
 
-// Setings
-#define MAX_BITS      26
-#define TIMEOUT       20
-
-// Parity
-#define EVEN          false
-#define ODD           true
-
-// States
-#define INICIALIZE    0
-#define DATA_SENDED   1
-#define CONNECTION    2
-#define LOGIC_FAULT   3
-#define RCV_TIMEOUT   4
-#define BITS_FAULTS   5
-#define PARITY_FRST   6
-#define PARITY_SCND   7
-
 
 
 // Set bit in buffer
@@ -94,9 +76,6 @@ void Wiegand26::reset () {
 // Emint data
 void Wiegand26::emit () {
 
-  // Send status reset
-  _doneOk = false;
-
   // Buffer size error
   if (_bitCnt != MAX_BITS) {
     bitSet (_state, BITS_FAULTS);
@@ -126,8 +105,6 @@ void Wiegand26::emit () {
       _data = alignData (_bitData);
       funcion_data (_data);
       bitSet (_state, DATA_SENDED);
-      _doneOk = true;
-      
     }
   }
 
@@ -161,7 +138,7 @@ void Wiegand26::timeout () {
 
   // Send
   if (_elapsed > TIMEOUT) {
-    if (!_doneOk) {
+    if (_bitCnt) {
       bitSet (_state, RCV_TIMEOUT);
       emit ();
     }
@@ -217,7 +194,6 @@ void Wiegand26::begin (uint8_t pinData0, uint8_t pinData1, bool state) {
   // Inicialize
   _sendState = state;
   _first = true;
-  _doneOk = true;
   _stateOld = 0;
   _state = 0;
   reset ();
