@@ -12,7 +12,8 @@ Library is made for Arduino IDE and for Arduinos, ESP32 and ESP8266.
 
 * Service is "waiting on backgroud" and it's fired by interupts
 * _Data_ and _Status_ are served by event _(callback)_ function, it's not required function at _loop_
-* _Data_ is formated as 3Byte number _(unsigned long)_
+* _Key_ is formated as 1Byte number _(unsigned short int / Byte)_
+* _Code_ and _Data_ is formated as 3Byte number _(unsigned long)_
 * _Status_ id formated as 1Byte number _(unsigned short int / Byte)_
 * _Status_ data can be triggered manually
 
@@ -21,6 +22,8 @@ Library is made for Arduino IDE and for Arduinos, ESP32 and ESP8266.
 
 * 1.0.0 - Initial release
 * 1.1.0 - Swapping read Bytes of serial number for correct show
+* 1.2.0 - Swapping readed Bytes is optional (non-swap data (125kH readers), swap data (some 13.56MHz readers))
+* 2.0.0 - Support for Wiegand keyboard with 8bits protocol
 
 ## Using
 
@@ -61,11 +64,15 @@ void setup()
   delay (1000);
 
   // Wiegand RFID
+  wiegand.onKey (wiegandKey);                     // Function for handle with key
+  wiegand.onCode (wiegandCode);                   // Function for handle with code
   wiegand.onData (wiegandData);                   // Function for handle with data
   wiegand.onState (wiegandState);                 // Function for handle with status
-  wiegand.begin(wiegandD0, wiegandD1, true);
+  wiegand.begin(wiegandD0, wiegandD1, true, false);
   //            Data0      Data1      false == Send state only on change
   //                                  true  == Send state on each data reading
+  //                                        false == non-swap data (125kH readers)
+  //                                        true  == swap data (some 13.56MHz readers)
 
   // Interrupt for Wiegand data pin
   attachInterrupt(digitalPinToInterrupt(wiegandD0), wiegandPinChanged, FALLING);
@@ -111,6 +118,37 @@ void wiegandState (uint8_t state) {
     Serial.println ("Wiegand26 - Second parity fault");
   }
   
+}
+
+// Print received Wiegand key
+void wiegandKey (uint8_t value) {
+
+  Serial.print ("Wiegand26 - Key: 0x");
+  Serial.println (value, HEX);
+
+  Serial.print ("Wiegand26 - Key: 0b");
+  Serial.println (value, BIN);
+
+  Serial.print ("Wiegand26 - Key: ");
+  Serial.println (value, DEC);
+
+  Serial.println ();
+
+}
+
+// Print received Wiegand code
+void wiegandCode (unsigned long value) {
+
+  Serial.print ("Wiegand26 - Code: 0x");
+  Serial.println (value, HEX);
+
+  Serial.print ("Wiegand26 - Code: 0b");
+  Serial.println (value, BIN);
+
+  Serial.print ("Wiegand26 - Code: ");
+  Serial.println (value, DEC);
+
+  Serial.println ();
 }
 
 // Print received Wiegand data

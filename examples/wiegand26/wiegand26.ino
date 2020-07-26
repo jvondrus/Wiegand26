@@ -31,11 +31,15 @@ void setup()
   delay (1000);
 
   // Wiegand RFID
+  wiegand.onKey (wiegandKey);
+  wiegand.onCode (wiegandCode);
   wiegand.onData (wiegandData);
   wiegand.onState (wiegandState);
-  wiegand.begin(wiegandD0, wiegandD1, true);
+  wiegand.begin(wiegandD0, wiegandD1, true, false);
   //            Data0      Data1      false == Send state only on change
   //                                  true  == Send state on each data reading
+  //                                        false == non-swap data (125kH readers)
+  //                                        true  == swap data (some 13.56MHz readers)
 
   // Interrupt for Wiegand data pin
   attachInterrupt(digitalPinToInterrupt(wiegandD0), wiegandPinChanged, FALLING);
@@ -79,6 +83,36 @@ void wiegandState (uint8_t state) {
   
 }
 
+// Print received Wiegand key
+void wiegandKey (uint8_t value) {
+
+  Serial.print ("Wiegand26 - Key: 0x");
+  Serial.println (value, HEX);
+
+  Serial.print ("Wiegand26 - Key: 0b");
+  Serial.println (value, BIN);
+
+  Serial.print ("Wiegand26 - Key: ");
+  Serial.println (value, DEC);
+
+  Serial.println ();
+
+}
+
+// Print received Wiegand code
+void wiegandCode (unsigned long value) {
+
+  Serial.print ("Wiegand26 - Code: 0x");
+  Serial.println (value, HEX);
+
+  Serial.print ("Wiegand26 - Code: 0b");
+  Serial.println (value, BIN);
+
+  Serial.print ("Wiegand26 - Code: ");
+  Serial.println (value, DEC);
+
+  Serial.println ();
+}
 
 // Print received Wiegand data
 void wiegandData (unsigned long value) {

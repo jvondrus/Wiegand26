@@ -1,7 +1,7 @@
 /*
 *  Wiegand26
 *  by Jiri Vondrus (https://github.com/jvondrus)
-*  Version 1.1.0 06-2020
+*  Version 2.0.0 07-2020
 */
 
 // Define
@@ -13,7 +13,10 @@
 
 // Setings
 #define MAX_BITS      26
+#define KEY_BITS      8
+#define KEY_SEND      11
 #define TIMEOUT       20
+#define TIMEOUTKEY    5000
 
 // Parity
 #define EVEN          false
@@ -39,10 +42,10 @@ class Wiegand26
 
     // Inicialize
     Wiegand26 () { }
-    Wiegand26 (uint8_t pinData0, uint8_t pinData1, bool status=true) {
+    Wiegand26 (uint8_t pinData0, uint8_t pinData1, bool status=true, bool swapData=false) {
       begin (pinData0, pinData1);
     }
-    void begin (uint8_t pinData0, uint8_t pinData1, bool status=true);
+    void begin (uint8_t pinData0, uint8_t pinData1, bool status=true, bool swapData=false);
 
     // Reading data
     void readData (void);
@@ -50,17 +53,29 @@ class Wiegand26
     // Reading state
     void readState (void);
 
+    // Emit key
+    void onKey (void (*func) (uint8_t key)) {
+      function_key = (callback_key)func;
+    }
+
+    // Emit code
+    void onCode (void (*func) (unsigned long code)) {
+      function_code = (callback_code)func;
+    }
+
     // Emit data
     void onData (void (*func) (unsigned long data)) {
-      funcion_data = (callback_data)func;
+      function_data = (callback_data)func;
     }
 
     // Emit State
     void onState (void (*func) (uint8_t state)) {
-      funcion_state = (callback_state)func;
+      function_state = (callback_state)func;
     }
 
     // Type definition
+    typedef void (*callback_key) (uint8_t key);
+    typedef void (*callback_code) (unsigned long code);
     typedef void (*callback_data) (unsigned long data);
     typedef void (*callback_state) (uint8_t state);
 
@@ -81,7 +96,10 @@ class Wiegand26
 
     // Buffer
     uint8_t _bitCnt;
+    uint8_t _keyCnt;
     bool _bitData[MAX_BITS];
+    uint8_t _key;
+    unsigned long _code;
     unsigned long _data;
 
     // State
@@ -89,6 +107,7 @@ class Wiegand26
     uint8_t _state;
     uint8_t _stateOld;
     bool _sendState;
+    bool _swapData;
 
     // Reset
     void reset (void);
@@ -96,12 +115,17 @@ class Wiegand26
     // Timeout
     void timeout (void);
 
+    // Emit Key data
+    void emitKey (void);
+
     // Emint data
-    void emit (void);
+    void emitData (void);
 
     // Callback functions
-    Wiegand26::callback_data funcion_data;
-    Wiegand26::callback_state funcion_state;
+    Wiegand26::callback_key function_key;
+    Wiegand26::callback_code function_code;
+    Wiegand26::callback_data function_data;
+    Wiegand26::callback_state function_state;
 
 };
 
